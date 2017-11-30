@@ -4,4 +4,5 @@ class ActionItem < ActiveRecord::Base
   validates_date :completed_on, allow_nil: true
 
   belongs_to :board
+  belongs_to :assigned_to, class_name: 'User'
 end
