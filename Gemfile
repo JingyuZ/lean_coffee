@@ -36,6 +36,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'webpacker', '~> 3.0'
 
 gem 'validates_timeliness', '~> 4.0'
+gem 'devise'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
