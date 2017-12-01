@@ -61,14 +61,14 @@ class App extends Component {
 
     return (
       <div>
-        <header className="mb-4 d-flex flex-row justify-content-between align-items-center">
+        <header className="d-flex flex-row justify-content-between align-items-center">
           <h1>Topic: {topic}</h1>
           <Button color="success" onClick={this.onClickNewSubtopic} disabled={newSubtopic}>
             <i className="fa fa-plus-circle mr-1" aria-hidden="true"></i>
             Create Subtopic
           </Button>
-          {description && <p>Description: {description}</p>}
         </header>
+        {description && <p className="mb-4">Description: {description}</p>}
         <h2>Subtopics</h2>
         {subtopicGroups.map((subtopicGroup, index) => (<SubtopicGroup className="mb-2" key={index} subtopics={subtopicGroup.subtopics} onVote={this.onVote} votes={subtopicGroup.votes}/>))}
         {newSubtopic && <NewSubtopic createNewSubtopic={this.createNewSubtopic} cancelNewSubtopic={this.cancelNewSubtopic} errors={newSubtopicErrors} />}
