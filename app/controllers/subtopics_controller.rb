@@ -7,7 +7,7 @@ class SubtopicsController < ApplicationController
     subtopic_group = subtopic.subtopic_group
     subtopic_group.update!(votes: subtopic_group.votes + 1)
 
-    ActionCable.server.broadcast('messages', votes: subtopic_group.votes)
+    ActionCable.server.broadcast('messages', votes: subtopic_group.votes, id: subtopic_group.id)
 
     head :no_content
   end
@@ -39,7 +39,6 @@ class SubtopicsController < ApplicationController
           result[:subtopic] = subtopic.as_json
         else
           status = :unprocessable_entity
-          p subtopic.errors
           result[:errors] = subtopic.errors.to_h
         end
         render json: result, status: status

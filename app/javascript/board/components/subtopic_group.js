@@ -24,12 +24,12 @@ class SubtopicGroup extends Component {
   };
 
   render() {
-    const { className, subtopics, votes } = this.props;
+    const { className, subtopics, onVote, votes, id } = this.props;
 
     return (
       <div className="d-flex flex-row align-items-center">
         <Button size="sm">
-          <p className="subtopic-group-votes-count">{`${votes} votes`}</p>
+          <p className={`subtopic-group-votes-count js-subtopic-group-${id}`}>{`${votes} votes`}</p>
         </Button>
         <CardGroup className="d-flex flex-row" style={{ flex: '1' }}>
           {subtopics.map((subtopic, index) => (this.renderSubtopic(subtopic, index)))}

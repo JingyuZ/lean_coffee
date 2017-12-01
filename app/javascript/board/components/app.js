@@ -48,7 +48,7 @@ class App extends Component {
     const params = { subtopic: subtopicInfo, board_id: id };
     post('/subtopics', params)
       .then((data) => {
-        const newSubtopicGroup = { subtopics: [data.subtopic], votes: 0 };
+        const newSubtopicGroup = { subtopics: [data.subtopic], votes: 0, id: data.subtopic.subtopic_group_id };
         this.setState({ subtopicGroups: subtopicGroups.concat(newSubtopicGroup), newSubtopic: false, newSubtopicErrors: null });
       });
   };
@@ -106,8 +106,7 @@ class App extends Component {
             style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'transparent' }}
             className="mb-2"
           >
-            <SubtopicGroup subtopics={subtopicGroup.subtopics} onVote={this.onVote} votes={subtopicGroup.votes} />
-          </div>
+          <SubtopicGroup className="mb-2" key={index} subtopics={subtopicGroup.subtopics} onVote={this.onVote} votes={subtopicGroup.votes} id={subtopicGroup.id} />          </div>
         )}
 
       </Droppable>

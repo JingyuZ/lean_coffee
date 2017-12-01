@@ -5,6 +5,6 @@ class Subtopic < ActiveRecord::Base
   belongs_to :submitted_by, class_name: 'User'
 
   def as_json(options = {})
-    super(only: [:id, :description])
+    super(only: [:id, :description, :subtopic_group_id])
   end
 end
