@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :subtopics, only: [:create] do
     member do
       post :vote
+      post :change_group
     end
   end
 

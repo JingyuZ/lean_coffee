@@ -12,6 +12,22 @@ class SubtopicsController < ApplicationController
     head :no_content
   end
 
+  def change_group
+    subtopic_id = params[:id]
+    subtopic = Subtopic.find(subtopic_id)
+    source_group = subtopic.subtopic_group
+    destination_group_id = params[:subtopic_group_id]
+
+    subtopic.update_attributes!(subtopic_group_id: destination_group_id)
+    result = { subtopic: subtopic.as_json, source_group_destroyed: false, source_group_id: source_group.id }
+    if source_group.reload.subtopics.empty?
+      result[:source_group_destroyed] = true
+      source_group.destroy!
+    end
+
+    render json: result
+  end
+
   def create
     respond_to do |format|
       format.json do

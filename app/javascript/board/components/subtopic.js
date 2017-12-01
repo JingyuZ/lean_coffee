@@ -9,8 +9,8 @@ class Subtopic extends Component {
 
     return (
       <Card>
-        <CardBlock>
-          <CardText>{description}</CardText>
+        <CardBlock className="d-flex flex-column">
+          <CardText style={{ flex: '1' }}>{description}</CardText>
           <Button block className="mt-2" size="sm" onClick={() => (onVote(id))}>
             <i className="fa fa-arrow-circle-up mr-1" aria-hidden="true"></i>
             Vote

@@ -8,6 +8,7 @@
     "coffeescript": "1.12.7",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-beautiful-dnd": "^3.0.0",
     "react-dom": "^16.2.0",
     "react-transition-group": "^1.1.2",
     "reactstrap": "^4.8.0"
