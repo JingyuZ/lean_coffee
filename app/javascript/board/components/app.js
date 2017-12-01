@@ -119,7 +119,7 @@ class App extends Component {
 
       const indexOfSourceGroup = subtopicGroups.findIndex((subtopicGroup) => (subtopicGroup.id === data.source_group_id));
       if (data.source_group_destroyed) {
-        newSubtopicGroups = subtopicGroups.slice(0, indexOfSourceGroup - 1).concat(subtopicGroups.slice(indexOfSourceGroup + 1, subtopicGroups.length));
+        newSubtopicGroups = subtopicGroups.slice(0, indexOfSourceGroup).concat(subtopicGroups.slice(indexOfSourceGroup + 1, subtopicGroups.length));
       } else {
         const indexOfTopicToRemove = subtopicGroups[indexOfSourceGroup].subtopics.findIndex((subtopic) => (subtopic.id == subtopicId));
         const sourceSubtopics = subtopicGroups[indexOfSourceGroup].subtopics;
