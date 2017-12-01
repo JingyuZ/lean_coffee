@@ -1,5 +1,6 @@
 <% content_for :javascript do %>
   <%= javascript_pack_tag 'board' %>
 <% end %>
+<%= action_cable_meta_tag %>
 
 <div class="d-none js-board-id" data-board-id="<%= @board_id %>"></div>

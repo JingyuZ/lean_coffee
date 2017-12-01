@@ -7,6 +7,8 @@ class SubtopicsController < ApplicationController
     subtopic_group = subtopic.subtopic_group
     subtopic_group.update!(votes: subtopic_group.votes + 1)
 
+    ActionCable.server.broadcast('messages', votes: subtopic_group.votes)
+
     head :no_content
   end
 end
