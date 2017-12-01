@@ -9,10 +9,11 @@ class Subtopic extends Component {
 
     return (
       <Card>
-        <CardBlock className="d-flex flex-row justify-content-between align-items-center">
+        <CardBlock>
           <CardText>{description}</CardText>
-          <Button size="sm" onClick={() => (onVote(id))}>
-            <i className="fa fa-arrow-circle-up" aria-label="Upvote"></i>
+          <Button block className="mt-2" size="sm" onClick={() => (onVote(id))}>
+            <i className="fa fa-arrow-circle-up mr-1" aria-hidden="true"></i>
+            Vote
           </Button>
         </CardBlock>
       </Card>
