@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import ActionCable from 'actioncable'
 
 import SubtopicGroup from './subtopic_group';
+import WebNotifications from './web_notifications';
 import { get, post } from '../../shared/api_helper';
 import NewSubtopic from './new_subtopic';
+
+window.App = {};
 
 class App extends Component {
   constructor(props) {
@@ -23,6 +27,7 @@ class App extends Component {
 
   componentDidMount = () => {
     const setState = this.setState.bind(this);
+    const that = this;
 
     get(`/boards/${this.state.id}`).then(function(data) {
       setState({
@@ -31,6 +36,18 @@ class App extends Component {
         subtopicGroups: data.subtopic_groups,
       });
     });
+
+    window.App.cable = ActionCable.createConsumer(`ws://${window.location.hostname}:3000/cable`);
+    WebNotifications.subscribe((data) => {
+      let subtopicGroups = that.state.subtopicGroups;
+      for (let i in subtopicGroups) {
+        if (subtopicGroups[i].id === data.id) {
+          subtopicGroups[i].votes = data.votes;
+          break;
+        }
+      }
+      setState({ subtopicGroups });
+    })
   };
 
   onClickNewSubtopic = () => {
