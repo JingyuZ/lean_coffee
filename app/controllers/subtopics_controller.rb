@@ -37,6 +37,7 @@ class SubtopicsController < ApplicationController
         status = :ok
         if subtopic.save
           result[:subtopic] = subtopic.as_json
+          ActionCable.server.broadcast('new_subtopic', subtopic: subtopic.as_json)
         else
           status = :unprocessable_entity
           result[:errors] = subtopic.errors.to_h

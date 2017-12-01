@@ -5,6 +5,7 @@ import ActionCable from 'actioncable'
 
 import SubtopicGroup from './subtopic_group';
 import WebNotifications from './web_notifications';
+import NewSubtopicNotifications from './new_subtopic_notifications';
 import { get, post } from '../../shared/api_helper';
 import NewSubtopic from './new_subtopic';
 
@@ -47,7 +48,22 @@ class App extends Component {
         }
       }
       setState({ subtopicGroups });
-    })
+    });
+    NewSubtopicNotifications.subscribe((data) => {
+      let subtopicGroups = that.state.subtopicGroups;
+      let myChannelUpdate = false;
+      for (let i in subtopicGroups) {
+        if (subtopicGroups[i].id === data.subtopic.subtopic_group_id) {
+          myChannelUpdate = true;
+          break;
+        }
+      }
+      if (!myChannelUpdate) {
+        const newSubtopicGroup = { id: data.subtopic.subtopic_group_id, subtopics: [data.subtopic], votes: 0 };
+        subtopicGroups = subtopicGroups.concat([newSubtopicGroup]);
+        setState({ subtopicGroups });
+      }
+    });
   };
 
   onClickNewSubtopic = () => {
