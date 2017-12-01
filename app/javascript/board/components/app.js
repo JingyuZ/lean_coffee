@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Subtopic from './subtopic';
+import SubtopicGroup from './subtopic_group';
 import { get, post } from '../../shared/api_helper';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
       id: boardId,
       topic: null,
       description: null,
-      subtopics: [],
+      subtopicGroups: [],
     };
   }
 
@@ -23,7 +23,7 @@ class App extends Component {
       setState({
         topic: data.topic,
         description: data.description,
-        subtopics: data.subtopics,
+        subtopicGroups: data.subtopic_groups,
       });
     });
   };
@@ -33,13 +33,13 @@ class App extends Component {
   };
 
   render() {
-    const { topic, description, subtopics } = this.state;
+    const { topic, description, subtopicGroups } = this.state;
 
     return (
       <div>
         <h1>{topic}</h1>
         <p>{description}</p>
-        {subtopics.map((subtopic, index) => (<Subtopic className="mb-2" key={index} description={subtopic.description} onVote={this.onVote} id={subtopic.id} />))}
+        {subtopicGroups.map((subtopicGroup, index) => (<SubtopicGroup className="mb-2" key={index} subtopics={subtopicGroup.subtopics} onVote={this.onVote} />))}
       </div>
     );
   }

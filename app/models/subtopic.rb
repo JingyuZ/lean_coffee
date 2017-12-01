@@ -3,4 +3,8 @@ class Subtopic < ActiveRecord::Base
 
   belongs_to :subtopic_group
   belongs_to :submitted_by, class_name: 'User'
+
+  def as_json(options = {})
+    super(only: [:id, :description])
+  end
 end

@@ -4,10 +4,11 @@ import { Button, Card, CardText, CardBlock } from 'reactstrap';
 
 class Subtopic extends Component {
   render() {
-    const { className, description, onVote, id } = this.props;
+    const { onVote, subtopic } = this.props;
+    const { description, id } = subtopic;
 
     return (
-      <Card className={className}>
+      <Card>
         <CardBlock className="d-flex flex-row justify-content-between align-items-center">
           <CardText>{description}</CardText>
           <Button size="sm" onClick={() => (onVote(id))}>
@@ -20,9 +21,7 @@ class Subtopic extends Component {
 }
 
 Subtopic.propTypes = {
-  className: PropTypes.string,
-  description: PropTypes.string,
-  id: PropTypes.number,
+  subtopic: PropTypes.object,
   onVote: PropTypes.func,
 };
 
