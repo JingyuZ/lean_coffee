@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 
-import { get } from '../../shared/api_helper';
+import Subtopic from './subtopic';
+import { get, post } from '../../shared/api_helper';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class App extends Component {
       id: boardId,
       topic: null,
       description: null,
-      // subtopics: [],
+      subtopics: [],
     };
   }
 
@@ -24,17 +23,23 @@ class App extends Component {
       setState({
         topic: data.topic,
         description: data.description,
+        subtopics: data.subtopics,
       });
     });
   };
 
+  onVote = (subtopicId) => {
+    post(`/subtopics/${subtopicId}/vote`);
+  };
+
   render() {
-    const { topic, description } = this.state;
+    const { topic, description, subtopics } = this.state;
 
     return (
       <div>
         <h1>{topic}</h1>
         <p>{description}</p>
+        {subtopics.map((subtopic, index) => (<Subtopic className="mb-2" key={index} description={subtopic.description} onVote={this.onVote} id={subtopic.id} />))}
       </div>
     );
   }

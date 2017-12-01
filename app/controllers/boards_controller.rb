@@ -2,8 +2,8 @@ class BoardsController < ApplicationController
   before_action :authenticate_user!
 
   BOARDS = [
-    { id: 1, topic: 'pumpkin pie', description: 'da real mvp' },
-    { id: 2, topic: 'coffee mochi', description: 'you can not drink coffee hahaha' },
+    { id: 1, topic: 'pumpkin pie', description: 'da real mvp', subtopics: [ { id: 1, description: 'Where is the whip cream?' } ] },
+    { id: 2, topic: 'coffee mochi', description: 'you can not drink coffee hahaha', subtopics: [{ id: 2, description: 'How long does it take to soften?' }] },
   ].freeze
 
   def index

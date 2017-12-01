@@ -22,3 +22,7 @@ main {
   max-width: 1000px;
   padding: 1em;
 }
+
+p {
+  margin: 0 !important;
+}

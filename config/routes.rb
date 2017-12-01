@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   root to: 'random#index'
 
   resources :boards, only: [:index, :show]
+  resources :subtopics, only: [] do
+    member do
+      post :vote
+    end
+  end
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }, only: [:sessions, :omniauth_callbacks]
 end

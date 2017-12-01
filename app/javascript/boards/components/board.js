@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
-import { Card, CardText, CardBlock, CardTitle } from 'reactstrap';
+import { Card, CardBlock, CardText, CardTitle } from 'reactstrap';
 
 const Board = (props) => (
   <Card className="mb-2">
