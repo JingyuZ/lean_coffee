@@ -13,7 +13,7 @@ class SubtopicGroup extends Component {
         <Button size="sm">
           <p className="subtopic-group-votes-count">{`${votes} votes`}</p>
         </Button>
-        <CardGroup className={className}>
+        <CardGroup className={className} style={{ flex: '1' }}>
           {subtopics.map((subtopic, index) => (<Subtopic key={index} subtopic={subtopic} onVote={onVote} />))}
         </CardGroup>
       </div>
