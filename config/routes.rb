@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   root to: 'boards#index'
 
   resources :boards, only: [:index, :show, :create]
-  resources :subtopics, only: [] do
+  resources :subtopics, only: [:create] do
     member do
       post :vote
     end
