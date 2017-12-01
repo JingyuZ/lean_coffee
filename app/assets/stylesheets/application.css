@@ -13,4 +13,12 @@
  *= require_tree .
  *= require_self
  *= require bootstrap/dist/css/bootstrap
+ *= require font-awesome
+ *= require bootstrap-social
  */
+
+main {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 1em;
+}

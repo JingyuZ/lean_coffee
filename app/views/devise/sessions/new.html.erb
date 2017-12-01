@@ -1,0 +1,5 @@
+<h2>Log in to Lean Coffee</h2>
+
+<%= link_to omniauth_authorize_path(resource_name, resource_class.omniauth_providers.first), class: 'btn btn-social btn-google' do %>
+  <span class="fa fa-google"></span> Sign in with Google
+<% end %>

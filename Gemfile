@@ -38,6 +38,7 @@ gem 'webpacker', '~> 3.0'
 gem 'validates_timeliness', '~> 4.0'
 gem 'devise'
 gem 'omniauth-google-oauth2'
+gem 'font-awesome-rails', '~> 4.7'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
