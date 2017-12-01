@@ -24,13 +24,17 @@ class App extends Component {
     });
   };
 
+  onClickBoard = (boardId) => {
+    window.location = `/boards/${boardId}`;
+  };
+
   render() {
     const { boards } = this.state;
 
     return (
       <div>
         <h1>Boards</h1>
-        {boards.map((board, index) => (<Board key={index} topic={board.topic} description={board.description} />))}
+        {boards.map((board, index) => (<Board key={index} topic={board.topic} description={board.description} id={board.id} onClick={this.onClickBoard} />))}
       </div>
     );
   }
