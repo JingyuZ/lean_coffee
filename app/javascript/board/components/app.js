@@ -37,8 +37,10 @@ class App extends Component {
 
     return (
       <div>
-        <h1>Topic: {topic}</h1>
-        <p className="mb-4">Description: {description}</p>
+        <header className="mb-4">
+          <h1>Topic: {topic}</h1>
+          {description && <p>Description: {description}</p>}
+        </header>
         <h2>Subtopics</h2>
         {subtopicGroups.map((subtopicGroup, index) => (<SubtopicGroup className="mb-2" key={index} subtopics={subtopicGroup.subtopics} onVote={this.onVote} />))}
       </div>
