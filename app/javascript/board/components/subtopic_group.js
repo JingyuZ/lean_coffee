@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { CardGroup } from 'reactstrap';
+import { Button, CardGroup } from 'reactstrap';
 
 import Subtopic from './subtopic';
 
 class SubtopicGroup extends Component {
   render() {
-    const { className, subtopics, onVote } = this.props;
+    const { className, subtopics, onVote, votes } = this.props;
 
     return (
-      <CardGroup className={className}>
-        {subtopics.map((subtopic, index) => (<Subtopic key={index} subtopic={subtopic} onVote={onVote} />))}
-      </CardGroup>
+      <div className="d-flex flex-row align-items-center">
+        <Button size="sm">
+          <p className="subtopic-group-votes-count">{`${votes} votes`}</p>
+        </Button>
+        <CardGroup className={className}>
+          {subtopics.map((subtopic, index) => (<Subtopic key={index} subtopic={subtopic} onVote={onVote} />))}
+        </CardGroup>
+      </div>
     );
   }
 }
