@@ -19,4 +19,27 @@ class BoardsController < ApplicationController
       end
     end
   end
+
+  def create
+    respond_to do |format|
+      format.json do
+        board = Board.new(create_board_params)
+        result = {}
+        status = :ok
+        if board.save
+          result[:board] = board.as_json
+        else
+          status = :unprocessable_entity
+          result[:errors] = board.errors.to_h
+        end
+        render json: result, status: status
+      end
+    end
+  end
+
+  private
+
+  def create_board_params
+    params.require(:board).permit(:topic, :description)
+  end
 end
