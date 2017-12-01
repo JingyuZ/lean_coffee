@@ -1,2 +1,5 @@
 <p>Hi!</p>
 <%= javascript_pack_tag 'hello_react' %>
+<%= form_for :logout, url: destroy_user_session_path, method: :delete do |f| %>
+  <%= f.submit 'Log Out', class: 'btn btn-primary' %>
+<% end %>
