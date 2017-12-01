@@ -47,7 +47,7 @@ class App extends Component {
           break;
         }
       }
-      setState({ subtopicGroups });
+      setState({ subtopicGroups }, this.sortSubtopicGroups());
     });
     NewSubtopicNotifications.subscribe((data) => {
       let subtopicGroups = that.state.subtopicGroups;
@@ -65,6 +65,21 @@ class App extends Component {
       }
     });
   };
+
+  sortSubtopicGroups() {
+    let subtopicGroups = this.state.subtopicGroups;
+    const newSubtopicGroups = subtopicGroups.sort((a, b) => {
+      const voteA = a.votes;
+      const voteB = b.votes;
+      if (voteA < voteB) {
+        return 1;
+      }
+      if (voteA > voteB) {
+        return -1;
+      }
+      return 0;
+    });
+  }
 
   onClickNewSubtopic = () => {
     if (!this.state.newSubtopic) {
