@@ -50,5 +50,6 @@ test:
 production:
   <<: *default
   database: lean_coffee_production
+  url: <%= ENV['DATABASE_URL'] %>
   username: lean_coffee
   password: <%= ENV['lean_coffee_DATABASE_PASSWORD'] %>
