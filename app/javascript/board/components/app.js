@@ -29,6 +29,7 @@ class App extends Component {
   componentDidMount = () => {
     const setState = this.setState.bind(this);
     const that = this;
+    const cabelUrl = document.querySelector('.js-board-id').dataset.cableUrl;
 
     get(`/boards/${this.state.id}`).then(function(data) {
       setState({
@@ -38,7 +39,7 @@ class App extends Component {
       });
     });
 
-    window.App.cable = ActionCable.createConsumer(`ws://${window.location.hostname}:3000/cable`);
+    window.App.cable = ActionCable.createConsumer(cabelUrl);
     WebNotifications.subscribe((data) => {
       let subtopicGroups = that.state.subtopicGroups;
       for (let i in subtopicGroups) {
