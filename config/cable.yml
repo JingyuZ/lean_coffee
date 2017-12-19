@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: redis://localhost:6379/1
+  url: redis://redistogo:a0329f8961d31bdb20d93e6372768a67@grouper.redistogo.com:9459/
   channel_prefix: lean_coffee_app_production

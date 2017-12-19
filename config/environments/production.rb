@@ -88,4 +88,15 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Config cable server's URI for production
+  config.web_socket_server_url = "wss://goleancoffee.herokuapp.com/cable"
+  
+  config.action_cable.url = "wss://#{ENV['RAILS_HOST']}/cable"
+
+  # Config WebSocket request origins
+  config.action_cable.allowed_request_origins = [
+    'https://goleancoffee.herokuapp.com',
+    'http://goleancoffee.herokuapp.com'
+  ]
 end
