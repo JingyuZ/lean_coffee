@@ -90,9 +90,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Config cable server's URI for production
-  config.web_socket_server_url = "wss://goleancoffee.herokuapp.com/cable"
-  
-  config.action_cable.url = "wss://#{ENV['RAILS_HOST']}/cable"
+  config.action_cable.url = "wss://goleancoffee.herokuapp.com/cable"
 
   # Config WebSocket request origins
   config.action_cable.allowed_request_origins = [
