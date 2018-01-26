@@ -2,7 +2,7 @@ class SubtopicGroup < ActiveRecord::Base
   validates_presence_of :votes, :board
 
   belongs_to :board
-  has_many :subtopics
+  has_many :subtopics, dependent: :destroy
 
   def as_json(options = {})
     super(only: [:id, :votes]).merge(subtopics: subtopics.as_json)
