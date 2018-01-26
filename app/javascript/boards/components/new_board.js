@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardBlock, CardTitle, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Card, CardBlock, CardHeader, CardFooter, Form, FormFeedback, FormGroup, Input, Label } from 'reactstrap';
 
 class NewBoard extends Component {
   constructor(props) {
@@ -66,18 +66,20 @@ class NewBoard extends Component {
   render() {
     return (
       <Card>
-        <CardBlock>
-          <CardTitle>New Board</CardTitle>
-          <Form onSubmit={this.onSubmitForm}>
+        <CardHeader>New Board</CardHeader>
+        <Form onSubmit={this.onSubmitForm}>
+          <CardBlock>
             {this.renderTopicInput()}
             <FormGroup>
               <Label for="boardDescription">Description</Label>
               <Input type="text" name="description" id="boardDescription" onChange={this.onDescriptionChange} />
             </FormGroup>
+          </CardBlock>
+          <CardFooter>
             <Button color="primary" className="mr-2">Create</Button>
             <Button color="secondary" onClick={this.onCancel}>Cancel</Button>
-          </Form>
-        </CardBlock>
+          </CardFooter>
+        </Form>
       </Card>
     );
   }
