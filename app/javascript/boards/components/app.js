@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
-import { get, post } from '../../shared/api_helper';
+import { get, post, del } from '../../shared/api_helper';
 import Board from './board';
 import NewBoard from './new_board';
 
@@ -52,6 +52,28 @@ class App extends Component {
     this.setState({ newBoard: false, newBoardErrors: null });
   };
 
+  deleteBoard = (boardId) => {
+    const { boards } = this.state;
+
+    del(`/boards/${boardId}`)
+      .then(() => {
+        const boardIndex = boards.findIndex((board) => (board.id == boardId));
+        let newBoards;
+        if (boardIndex === 0) {
+          newBoards = boards.slice(1);
+        } else if (boardIndex === boards.length - 1) {
+          newBoards = boards.slice(0, boardIndex);
+        } else {
+          newBoards = boards.slice(0, boardIndex - 1).concat(boards.slice(boardIndex + 1, boards.length));
+        }
+
+        this.setState({ boards: newBoards });
+      })
+      .catch((error) => {
+        alert(`Something went horribly wrong. Error: ${error}`)
+      })
+  };
+
   render() {
     const { boards, newBoard, newBoardErrors } = this.state;
 
@@ -64,7 +86,16 @@ class App extends Component {
             Create Board
           </Button>
         </header>
-        {boards.map((board, index) => (<Board key={index} topic={board.topic} description={board.description} id={board.id} onClick={this.onClickBoard} />))}
+        {boards.map((board, index) => (
+          <Board
+            key={index}
+            topic={board.topic}
+            description={board.description}
+            id={board.id}
+            onClick={this.onClickBoard}
+            deleteBoard={this.deleteBoard}
+          />
+        ))}
         {newBoard && <NewBoard createNewBoard={this.createNewBoard} cancelNewBoard={this.cancelNewBoard} errors={newBoardErrors} />}
       </div>
     );
