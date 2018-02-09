@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
-import { get, post, del } from '../../shared/api_helper';
+import { get, post, patch, del } from '../../shared/api_helper';
 import Board from './board';
 import NewBoard from './new_board';
 
@@ -37,6 +37,24 @@ class App extends Component {
     }
   };
 
+  updateBoard = (boardToUpdate, { errorsOnly = false } = {}) => {
+    const { boards } = this.state;
+
+    const boardIndex = boards.findIndex((board) => (board.id == boardToUpdate.id));
+    const newBoardInfo = errorsOnly ? { error_messages: boardToUpdate.error_messages } : boardToUpdate;
+    const newBoard = Object.assign({}, boards[boardIndex], newBoardInfo);
+    let newBoards;
+    if (boardIndex === 0) {
+      newBoards = [newBoard].concat(boards.slice(1));
+    } else if (boardIndex === boards.length - 1) {
+      newBoards = boards.slice(0, boardIndex).concat(newBoard);
+    } else {
+      newBoards = boards.slice(0, boardIndex).concat(newBoard).concat(boards.slice(boardIndex + 1, boards.length));
+    }
+
+    this.setState({ boards: newBoards });
+  };
+
   createNewBoard = (boardInfo) => {
     const { boards } = this.state;
     post('/boards', { board: boardInfo })
@@ -50,6 +68,30 @@ class App extends Component {
 
   cancelNewBoard = () => {
     this.setState({ newBoard: false, newBoardErrors: null });
+  };
+
+  saveBoard = (boardId, boardAttrs) => (
+    patch(`/boards/${boardId}`, boardAttrs)
+      .then((data) => {
+        if (data.board) {
+          this.updateBoard(data.board);
+        } else {
+          alert(`Something went horribly wrong: ${data}`);
+        }
+        return {success: true};
+      })
+      .catch((error) => {
+        if (error.data && error.data.board) {
+          this.updateBoard(error.data.board, {errorsOnly: true});
+        } else {
+          alert(`Something went horribly wrong: ${error}`);
+        }
+        return {success: false};
+      })
+  );
+
+  cancelBoardUpdate = (boardId) => {
+    this.updateBoard({ id: boardId, error_messages: null });
   };
 
   deleteBoard = (boardId) => {
@@ -94,6 +136,9 @@ class App extends Component {
             id={board.id}
             onClick={this.onClickBoard}
             deleteBoard={this.deleteBoard}
+            saveBoard={this.saveBoard}
+            cancelSaveBoard={this.cancelBoardUpdate}
+            errors={board.error_messages}
           />
         ))}
         {newBoard && <NewBoard createNewBoard={this.createNewBoard} cancelNewBoard={this.cancelNewBoard} errors={newBoardErrors} />}

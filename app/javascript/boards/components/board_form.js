@@ -8,18 +8,35 @@ class BoardForm extends Component {
 
     this.state = {
       formData: {
-        topic: null,
-        description: null,
+        topic: '',
+        description: '',
       },
     };
   }
 
+  componentWillMount = () => {
+    const { board } = this.props;
+
+    if (board) {
+      this.setState({
+        formData: {
+          topic: board.topic,
+          description: board.description
+        }
+      });
+    }
+  };
+
   onSubmitForm = (event) => {
-    const { saveBoard } = this.props;
+    const { saveBoard, board } = this.props;
     const { formData } = this.state;
 
     event.preventDefault();
-    saveBoard(formData);
+    if (board) {
+      saveBoard(board.id, formData);
+    } else {
+      saveBoard(formData);
+    }
   };
 
   onTopicChange = (event) => {
@@ -41,11 +58,13 @@ class BoardForm extends Component {
   renderTopicInput = () => {
     let topicErrors;
     const { topic: error } = this.props.errors || {};
+    const { topic } = this.state.formData;
     const inputProps = {
       type: 'text',
       name: 'topic',
       id: 'boardTopic',
       onChange: this.onTopicChange,
+      value: topic,
     };
     const formGroupProps = {};
     if (error) {
@@ -64,17 +83,24 @@ class BoardForm extends Component {
   };
 
   render() {
-    const { boardFormTitle, saveBoardButtonText } = this.props;
+    const { boardFormTitle, saveBoardButtonText, className } = this.props;
+    const { description } = this.state.formData;
 
     return (
-      <Card>
+      <Card className={className}>
         <CardHeader>{boardFormTitle}</CardHeader>
         <Form onSubmit={this.onSubmitForm}>
           <CardBlock>
             {this.renderTopicInput()}
             <FormGroup>
               <Label for="boardDescription">Description</Label>
-              <Input type="text" name="description" id="boardDescription" onChange={this.onDescriptionChange} />
+              <Input
+                type="text"
+                name="description"
+                id="boardDescription"
+                onChange={this.onDescriptionChange}
+                value={description}
+              />
             </FormGroup>
           </CardBlock>
           <CardFooter>
@@ -92,7 +118,9 @@ BoardForm.propTypes = {
   saveBoardButtonText: PropTypes.string.isRequired,
   saveBoard: PropTypes.func.isRequired,
   cancelBoard: PropTypes.func.isRequired,
+  board: PropTypes.object,
   errors: PropTypes.object,
+  className: PropTypes.string,
 };
 
 export default BoardForm;
