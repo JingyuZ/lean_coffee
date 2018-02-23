@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
-import { get, post, patch, del } from '../../shared/api_helper';
+import * as api from '../../shared/api/boards';
 import Board from './board';
 import NewBoard from './new_board';
 
@@ -20,7 +19,7 @@ class App extends Component {
   componentDidMount = () => {
     const setState = this.setState.bind(this);
 
-    get('/boards').then(function(data) {
+    api.retrieveBoards().then(function(data) {
       setState({
         boards: data.boards,
       });
@@ -57,7 +56,7 @@ class App extends Component {
 
   createNewBoard = (boardInfo) => {
     const { boards } = this.state;
-    post('/boards', { board: boardInfo })
+    api.createBoard(boardInfo)
       .then((data) => {
         this.setState({ boards: boards.concat(data.board), newBoard: false, newBoardErrors: null });
       })
@@ -71,7 +70,7 @@ class App extends Component {
   };
 
   saveBoard = (boardId, boardAttrs) => (
-    patch(`/boards/${boardId}`, boardAttrs)
+    api.updateBoard(boardId, boardAttrs)
       .then((data) => {
         if (data.board) {
           this.updateBoard(data.board);
@@ -97,7 +96,7 @@ class App extends Component {
   deleteBoard = (boardId) => {
     const { boards } = this.state;
 
-    del(`/boards/${boardId}`)
+    api.deleteBoard(boardId)
       .then(() => {
         const boardIndex = boards.findIndex((board) => (board.id == boardId));
         let newBoards;
