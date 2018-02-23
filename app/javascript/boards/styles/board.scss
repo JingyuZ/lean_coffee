@@ -1,0 +1,11 @@
+.topic-board {
+  cursor: pointer;
+
+  &:hover {
+    background: #ffffd5;
+  }
+
+  .topic-board__footer {
+    cursor: default;
+  }
+}

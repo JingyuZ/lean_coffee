@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
-import { get, post } from '../../shared/api_helper';
+import * as api from '../../shared/api/boards';
 import Board from './board';
 import NewBoard from './new_board';
 
@@ -20,7 +19,7 @@ class App extends Component {
   componentDidMount = () => {
     const setState = this.setState.bind(this);
 
-    get('/boards').then(function(data) {
+    api.retrieveBoards().then(function(data) {
       setState({
         boards: data.boards,
       });
@@ -37,9 +36,27 @@ class App extends Component {
     }
   };
 
+  updateBoard = (boardToUpdate, { errorsOnly = false } = {}) => {
+    const { boards } = this.state;
+
+    const boardIndex = boards.findIndex((board) => (board.id == boardToUpdate.id));
+    const newBoardInfo = errorsOnly ? { errorMessages: boardToUpdate.errorMessages } : boardToUpdate;
+    const newBoard = Object.assign({}, boards[boardIndex], newBoardInfo);
+    let newBoards;
+    if (boardIndex === 0) {
+      newBoards = [newBoard].concat(boards.slice(1));
+    } else if (boardIndex === boards.length - 1) {
+      newBoards = boards.slice(0, boardIndex).concat(newBoard);
+    } else {
+      newBoards = boards.slice(0, boardIndex).concat(newBoard).concat(boards.slice(boardIndex + 1, boards.length));
+    }
+
+    this.setState({ boards: newBoards });
+  };
+
   createNewBoard = (boardInfo) => {
     const { boards } = this.state;
-    post('/boards', { board: boardInfo })
+    api.createBoard(boardInfo)
       .then((data) => {
         this.setState({ boards: boards.concat(data.board), newBoard: false, newBoardErrors: null });
       })
@@ -50,6 +67,52 @@ class App extends Component {
 
   cancelNewBoard = () => {
     this.setState({ newBoard: false, newBoardErrors: null });
+  };
+
+  saveBoard = (boardId, boardAttrs) => (
+    api.updateBoard(boardId, boardAttrs)
+      .then((data) => {
+        if (data.board) {
+          this.updateBoard(data.board);
+        } else {
+          alert(`Something went horribly wrong: ${data}`);
+        }
+        return {success: true};
+      })
+      .catch((error) => {
+        if (error.data && error.data.board) {
+          this.updateBoard(error.data.board, {errorsOnly: true});
+        } else {
+          alert(`Something went horribly wrong: ${error}`);
+        }
+        return {success: false};
+      })
+  );
+
+  cancelBoardUpdate = (boardId) => {
+    this.updateBoard({ id: boardId, errorMessages: null });
+  };
+
+  deleteBoard = (boardId) => {
+    const { boards } = this.state;
+
+    api.deleteBoard(boardId)
+      .then(() => {
+        const boardIndex = boards.findIndex((board) => (board.id == boardId));
+        let newBoards;
+        if (boardIndex === 0) {
+          newBoards = boards.slice(1);
+        } else if (boardIndex === boards.length - 1) {
+          newBoards = boards.slice(0, boardIndex);
+        } else {
+          newBoards = boards.slice(0, boardIndex - 1).concat(boards.slice(boardIndex + 1, boards.length));
+        }
+
+        this.setState({ boards: newBoards });
+      })
+      .catch((error) => {
+        alert(`Something went horribly wrong. Error: ${error}`)
+      })
   };
 
   render() {
@@ -64,7 +127,19 @@ class App extends Component {
             Create Board
           </Button>
         </header>
-        {boards.map((board, index) => (<Board key={index} topic={board.topic} description={board.description} id={board.id} onClick={this.onClickBoard} />))}
+        {boards.map((board, index) => (
+          <Board
+            key={index}
+            topic={board.topic}
+            description={board.description}
+            id={board.id}
+            onClick={this.onClickBoard}
+            deleteBoard={this.deleteBoard}
+            saveBoard={this.saveBoard}
+            cancelSaveBoard={this.cancelBoardUpdate}
+            errors={board.errorMessages}
+          />
+        ))}
         {newBoard && <NewBoard createNewBoard={this.createNewBoard} cancelNewBoard={this.cancelNewBoard} errors={newBoardErrors} />}
       </div>
     );

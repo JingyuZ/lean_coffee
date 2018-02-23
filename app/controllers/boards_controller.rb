@@ -37,9 +37,39 @@ class BoardsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      format.json do
+        board = Board.find(params[:id])
+        board.assign_attributes(update_board_params)
+        status =
+          if board.save
+            :ok
+          else
+            :unprocessable_entity
+          end
+
+        render json: { board: board.as_json }, status: status
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      format.json do
+        Board.find(params[:id]).destroy!
+        head :no_content
+      end
+    end
+  end
+
   private
 
   def create_board_params
+    params.require(:board).permit(:topic, :description)
+  end
+
+  def update_board_params
     params.require(:board).permit(:topic, :description)
   end
 end

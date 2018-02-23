@@ -3,4 +3,4 @@
 <% end %>
 <%= action_cable_meta_tag %>
 
-<div class="d-none js-board-id" data-board-id="<%= @board_id %> data-cable-url="<%= Rails.application.config.web_socket_server_url %>"></div>
+<div class="d-none js-board-id" data-board-id="<%= @board_id %> data-cable-url="<%= Rails.application.config.action_cable.url %>"></div>

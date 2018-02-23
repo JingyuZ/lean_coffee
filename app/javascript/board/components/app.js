@@ -35,7 +35,7 @@ class App extends Component {
       setState({
         topic: data.topic,
         description: data.description,
-        subtopicGroups: data.subtopic_groups,
+        subtopicGroups: data.subtopicGroups,
       });
     });
 
@@ -54,13 +54,13 @@ class App extends Component {
       let subtopicGroups = that.state.subtopicGroups;
       let myChannelUpdate = false;
       for (let i in subtopicGroups) {
-        if (subtopicGroups[i].id === data.subtopic.subtopic_group_id) {
+        if (subtopicGroups[i].id === data.subtopic.subtopicGroupId) {
           myChannelUpdate = true;
           break;
         }
       }
       if (!myChannelUpdate) {
-        const newSubtopicGroup = { id: data.subtopic.subtopic_group_id, subtopics: [data.subtopic], votes: 0 };
+        const newSubtopicGroup = { id: data.subtopic.subtopicGroupId, subtopics: [data.subtopic], votes: 0 };
         subtopicGroups = subtopicGroups.concat([newSubtopicGroup]);
         setState({ subtopicGroups });
       }
@@ -94,10 +94,10 @@ class App extends Component {
 
   createNewSubtopic = (subtopicInfo) => {
     const { id, subtopicGroups } = this.state;
-    const params = { subtopic: subtopicInfo, board_id: id };
+    const params = { subtopic: subtopicInfo, boardId: id };
     post('/subtopics', params)
       .then((data) => {
-        const newSubtopicGroup = { subtopics: [data.subtopic], votes: 0, id: data.subtopic.subtopic_group_id };
+        const newSubtopicGroup = { subtopics: [data.subtopic], votes: 0, id: data.subtopic.subtopicGroupId };
         this.setState({ subtopicGroups: subtopicGroups.concat(newSubtopicGroup), newSubtopic: false, newSubtopicErrors: null });
       });
   };
@@ -115,11 +115,11 @@ class App extends Component {
     const { subtopicGroups } = this.state;
     const subtopicGroupId = dropResult.destination.droppableId.split('-')[1];
     const subtopicId = dropResult.draggableId.split('-')[1];
-    post(`/subtopics/${subtopicId}/change_group`, { subtopic_group_id: subtopicGroupId }).then((data) => {
+    post(`/subtopics/${subtopicId}/change_group`, { subtopicGroupId: subtopicGroupId }).then((data) => {
       let newSubtopicGroups = subtopicGroups;
 
-      const indexOfSourceGroup = subtopicGroups.findIndex((subtopicGroup) => (subtopicGroup.id === data.source_group_id));
-      if (data.source_group_destroyed) {
+      const indexOfSourceGroup = subtopicGroups.findIndex((subtopicGroup) => (subtopicGroup.id === data.sourceGroupId));
+      if (data.sourceGroupDestroyed) {
         newSubtopicGroups = subtopicGroups.slice(0, indexOfSourceGroup).concat(subtopicGroups.slice(indexOfSourceGroup + 1, subtopicGroups.length));
       } else {
         const indexOfTopicToRemove = subtopicGroups[indexOfSourceGroup].subtopics.findIndex((subtopic) => (subtopic.id == subtopicId));
