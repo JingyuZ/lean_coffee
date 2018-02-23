@@ -40,7 +40,7 @@ class App extends Component {
     const { boards } = this.state;
 
     const boardIndex = boards.findIndex((board) => (board.id == boardToUpdate.id));
-    const newBoardInfo = errorsOnly ? { error_messages: boardToUpdate.error_messages } : boardToUpdate;
+    const newBoardInfo = errorsOnly ? { errorMessages: boardToUpdate.errorMessages } : boardToUpdate;
     const newBoard = Object.assign({}, boards[boardIndex], newBoardInfo);
     let newBoards;
     if (boardIndex === 0) {
@@ -90,7 +90,7 @@ class App extends Component {
   );
 
   cancelBoardUpdate = (boardId) => {
-    this.updateBoard({ id: boardId, error_messages: null });
+    this.updateBoard({ id: boardId, errorMessages: null });
   };
 
   deleteBoard = (boardId) => {
@@ -137,7 +137,7 @@ class App extends Component {
             deleteBoard={this.deleteBoard}
             saveBoard={this.saveBoard}
             cancelSaveBoard={this.cancelBoardUpdate}
-            errors={board.error_messages}
+            errors={board.errorMessages}
           />
         ))}
         {newBoard && <NewBoard createNewBoard={this.createNewBoard} cancelNewBoard={this.cancelNewBoard} errors={newBoardErrors} />}

@@ -1,3 +1,5 @@
+import { deepMapKeysToCamelCase, deepMapKeysToSnakeCase } from './deep_map_keys';
+
 const HOSTNAME = `${window.location.protocol}//${window.location.host}`;
 
 const HEADERS = {
@@ -55,7 +57,7 @@ function checkResponseStatus(res) {
         let data;
         try { data = JSON.parse(text); } catch (e) {}
         const error = new Error(!data && text || res.statusText);
-        error.data = data;
+        error.data = deepMapKeysToCamelCase(data);
         throw error;
       });
   }
@@ -68,14 +70,14 @@ function checkResponseStatus(res) {
 export function get(path, params) {
   let url = href(path);
   if (params && Object.keys(params).length) {
-    url = `${url}?${serialize(params)}`;
+    url = `${url}?${serialize(deepMapKeysToSnakeCase(params))}`;
   }
 
   return fetch(url, {
     credentials: 'same-origin',
     headers: HEADERS,
     redirect: 'error',
-  }).then(checkResponseStatus);
+  }).then(checkResponseStatus).then(deepMapKeysToCamelCase);
 }
 
 /**
@@ -83,12 +85,12 @@ export function get(path, params) {
  */
 export function post(path, body) {
   return fetch(href(path), {
-    body: JSON.stringify(body),
+    body: JSON.stringify(deepMapKeysToSnakeCase(body)),
     credentials: 'same-origin',
     headers: Object.assign({ 'X-CSRF-Token': getCsrfToken() }, HEADERS),
     method: 'POST',
     redirect: 'error',
-  }).then(checkResponseStatus);
+  }).then(checkResponseStatus).then(deepMapKeysToCamelCase);
 }
 
 /**
@@ -96,12 +98,12 @@ export function post(path, body) {
  */
 export function put(path, body) {
   return fetch(href(path), {
-    body: JSON.stringify(body),
+    body: JSON.stringify(deepMapKeysToSnakeCase(body)),
     credentials: 'same-origin',
     headers: Object.assign({ 'X-CSRF-Token': getCsrfToken() }, HEADERS),
     method: 'PUT',
     redirect: 'error',
-  }).then(checkResponseStatus);
+  }).then(checkResponseStatus).then(deepMapKeysToCamelCase);
 }
 
 /**
@@ -113,7 +115,7 @@ export function del(path) {
     headers: Object.assign({ 'X-CSRF-Token': getCsrfToken() }, HEADERS),
     method: 'DELETE',
     redirect: 'error',
-  }).then(checkResponseStatus);
+  }).then(checkResponseStatus).then(deepMapKeysToCamelCase);
 }
 
 /**
@@ -121,10 +123,10 @@ export function del(path) {
  */
 export function patch(path, body) {
   return fetch(href(path), {
-    body: JSON.stringify(body),
+    body: JSON.stringify(deepMapKeysToSnakeCase(body)),
     credentials: 'same-origin',
     headers: Object.assign({ 'X-CSRF-Token': getCsrfToken() }, HEADERS),
     method: 'PATCH',
     redirect: 'error',
-  }).then(checkResponseStatus);
+  }).then(checkResponseStatus).then(deepMapKeysToCamelCase);
 }
